@@ -3,9 +3,11 @@ import { Todo } from "./Todo";
 import { TodoForm } from "./TodoForm";
 import { v4 as uuidv4 } from "uuid";
 import { EditTodoForm } from "./EditTodoForm";
+import { SearchTask } from "./SearchTask";
 
 export const TodoWrapper = () => {
   const [todos, setTodos] = useState([]);
+  const [searchQuery, setSearchQuery] = useState('');
 
   const addTodo = (todo) => {
     setTodos([
@@ -40,12 +42,14 @@ export const TodoWrapper = () => {
     );
   };
 
+  const filteredTodos = todos.filter((todo) => todo.task.toLowerCase().includes(searchQuery.toLowerCase()));
+
   return (
     <div className="TodoWrapper">
       <h1>Get Things Done !</h1>
       <TodoForm addTodo={addTodo} />
-      {/* display todos */}
-      {todos.map((todo) =>
+      <SearchTask searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+      {filteredTodos.map((todo) =>
         todo.isEditing ? (
           <EditTodoForm editTodo={editTask} task={todo} />
         ) : (
